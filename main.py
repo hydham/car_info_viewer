@@ -1,3 +1,4 @@
+from cgitb import text
 from fastapi import FastAPI, Query, Path, HTTPException, status, Body
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
@@ -59,3 +60,11 @@ def update_car(id: int, car: Car = Body(...)):
     response = {}
     response[id] = cars[id]
     return response
+
+@app.delete("/cars/{id}")
+def delete_car(id: int):
+    if not cars.get(id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail= "car id is not found")
+    del cars[id]
+    
+    
